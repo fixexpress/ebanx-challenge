@@ -1,0 +1,15 @@
+C:\dev\teste\CastGroup-SEEC\challenge-castgroup-seec-backend\src\main\java\com\castgroup\seec\challenge\repository\UserRepository.java
+C:\dev\teste\CastGroup-SEEC\challenge-castgroup-seec-backend\src\main\java\com\castgroup\seec\challenge\model\User.java
+C:\dev\teste\CastGroup-SEEC\challenge-castgroup-seec-backend\src\main\java\com\castgroup\seec\challenge\security\JwtUtil.java
+C:\dev\teste\CastGroup-SEEC\challenge-castgroup-seec-backend\src\main\java\com\castgroup\seec\challenge\service\UserService.java
+C:\dev\teste\CastGroup-SEEC\challenge-castgroup-seec-backend\src\main\java\com\castgroup\seec\challenge\dto\SessionInfo.java
+C:\dev\teste\CastGroup-SEEC\challenge-castgroup-seec-backend\src\main\java\com\castgroup\seec\challenge\controller\AuthController.java
+C:\dev\teste\CastGroup-SEEC\challenge-castgroup-seec-backend\src\main\java\com\castgroup\seec\challenge\dto\AuthRequest.java
+C:\dev\teste\CastGroup-SEEC\challenge-castgroup-seec-backend\src\main\java\com\castgroup\seec\challenge\dto\AuthResponse.java
+C:\dev\teste\CastGroup-SEEC\challenge-castgroup-seec-backend\src\main\java\com\castgroup\seec\challenge\config\GlobalCorsConfig.java
+C:\dev\teste\CastGroup-SEEC\challenge-castgroup-seec-backend\src\main\java\com\castgroup\seec\challenge\security\JwtFilter.java
+C:\dev\teste\CastGroup-SEEC\challenge-castgroup-seec-backend\src\main\java\com\castgroup\seec\challenge\ChallengeCastgroupSeecBackendApplication.java
+C:\dev\teste\CastGroup-SEEC\challenge-castgroup-seec-backend\src\main\java\com\castgroup\seec\challenge\security\CustomPasswordEncoder.java
+C:\dev\teste\CastGroup-SEEC\challenge-castgroup-seec-backend\src\main\java\com\castgroup\seec\challenge\security\SecurityConfig.java
+C:\dev\teste\CastGroup-SEEC\challenge-castgroup-seec-backend\src\main\java\com\castgroup\seec\challenge\service\UserDetailService.java
+C:\dev\teste\CastGroup-SEEC\challenge-castgroup-seec-backend\src\main\java\com\castgroup\seec\challenge\controller\SessionController.java
