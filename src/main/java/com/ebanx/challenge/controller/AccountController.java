@@ -22,10 +22,11 @@ public class AccountController {
     }
 
     @PostMapping("/reset")
-    public ResponseEntity<Void> reset() {
+    public ResponseEntity<Object> reset() {
         accountService.reset();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(200).body("OK");
     }
+
 
     @GetMapping("/balance")
     public ResponseEntity<Integer> getBalance(@RequestParam String account_id) {
@@ -39,31 +40,77 @@ public class AccountController {
     @PostMapping("/event")
     public ResponseEntity<Object> handleEvent(@RequestBody Map<String, Object> event) {
         String type = (String) event.get("type");
-        if ("deposit".equals(type)) {
-            String destination = (String) event.get("destination");
-            int amount = (Integer) event.get("amount");
-            Account account = accountService.deposit(destination, amount);
-            return ResponseEntity.status(201).body(Map.of("destination", account));
-        } else if ("withdraw".equals(type)) {
-            String origin = (String) event.get("origin");
-            int amount = (Integer) event.get("amount");
-            Account account = accountService.withdraw(origin, amount);
-            if (account == null) {
-                return ResponseEntity.status(404).body(0);
-            }
-            return ResponseEntity.status(201).body(Map.of("origin", account));
-        } else if ("transfer".equals(type)) {
-            String origin = (String) event.get("origin");
-            String destination = (String) event.get("destination");
-            int amount = (Integer) event.get("amount");
-            if (!accountService.transfer(origin, destination, amount)) {
-                return ResponseEntity.status(404).body(0);
-            }
-            return ResponseEntity.status(201).body(Map.of(
-                "origin", accountService.getBalance(origin),
-                "destination", accountService.getBalance(destination)
-            ));
+
+        if (type == null || (!"deposit".equals(type) && !"withdraw".equals(type) && !"transfer".equals(type))) {
+            return ResponseEntity.badRequest().body("Unsupported or missing event type: " + type);
         }
-        return ResponseEntity.badRequest().build();
+
+        try {
+            switch (type) {
+                case "deposit":
+                    return handleDeposit(event);
+
+                case "withdraw":
+                    return handleWithdraw(event);
+
+                case "transfer":
+                    return handleTransfer(event);
+
+                default:
+                    return ResponseEntity.badRequest().body("Unknown event type: " + type);
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    private ResponseEntity<Object> handleDeposit(Map<String, Object> event) {
+        String destination = (String) event.get("destination");
+        Integer amount = (Integer) event.get("amount");
+
+        if (destination == null || amount == null || amount <= 0) {
+            throw new IllegalArgumentException("Invalid deposit event. Destination and positive amount are required.");
+        }
+
+        Account account = accountService.deposit(destination, amount);
+        return ResponseEntity.status(201).body(Map.of("destination", account));
+    }
+
+    private ResponseEntity<Object> handleWithdraw(Map<String, Object> event) {
+        String origin = (String) event.get("origin");
+        Integer amount = (Integer) event.get("amount");
+
+        if (origin == null || amount == null || amount <= 0) {
+            throw new IllegalArgumentException("Invalid withdraw event. Origin and positive amount are required.");
+        }
+
+        Account account = accountService.withdraw(origin, amount);
+        if (account == null) {
+            return ResponseEntity.status(404).body(0);
+        }
+        return ResponseEntity.status(201).body(Map.of("origin", account));
+    }
+
+    private ResponseEntity<Object> handleTransfer(Map<String, Object> event) {
+        String origin = (String) event.get("origin");
+        String destination = (String) event.get("destination");
+        Integer amount = (Integer) event.get("amount");
+
+        if (origin == null || destination == null || amount == null || amount <= 0) {
+            throw new IllegalArgumentException("Invalid transfer event. Origin, destination, and positive amount are required.");
+        }
+
+        boolean success = accountService.transfer(origin, destination, amount);
+        if (!success) {
+            return ResponseEntity.status(404).body(0);
+        }
+
+        Account originAccount = accountService.getBalance(origin);
+        Account destinationAccount = accountService.getBalance(destination);
+
+        return ResponseEntity.status(201).body(Map.of(
+            "origin", originAccount,
+            "destination", destinationAccount
+        ));
     }
 }
